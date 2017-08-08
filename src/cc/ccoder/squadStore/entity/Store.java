@@ -20,10 +20,11 @@ public class Store {
 	private Integer id;
 	private String username;
 	private String password;
-	private String sotrename;
+	private String storename;
 	private String phone;
 	private String address;
 	private String describe;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -42,11 +43,11 @@ public class Store {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getSotrename() {
-		return sotrename;
+	public String getStorename() {
+		return storename;
 	}
-	public void setSotrename(String sotrename) {
-		this.sotrename = sotrename;
+	public void setSotrename(String storename) {
+		this.storename = storename;
 	}
 	public String getPhone() {
 		return phone;
@@ -66,13 +67,13 @@ public class Store {
 	public void setDescribe(String describe) {
 		this.describe = describe;
 	}
-	public Store(Integer id, String username, String password, String sotrename, String phone, String address,
+	public Store(Integer id, String username, String password, String storename, String phone, String address,
 			String describe) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
-		this.sotrename = sotrename;
+		this.storename = storename;
 		this.phone = phone;
 		this.address = address;
 		this.describe = describe;
@@ -82,7 +83,7 @@ public class Store {
 	}
 	@Override
 	public String toString() {
-		return "Store [id=" + id + ", username=" + username + ", password=" + password + ", sotrename=" + sotrename
+		return "Store [id=" + id + ", username=" + username + ", password=" + password + ", storename=" + storename
 				+ ", phone=" + phone + ", address=" + address + ", describe=" + describe + "]";
 	}
 }

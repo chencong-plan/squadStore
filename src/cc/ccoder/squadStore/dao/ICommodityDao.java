@@ -45,4 +45,12 @@ public interface ICommodityDao {
 	 * @return 返回指定分页信息的结果集
 	 */
 	List<Commodity> getMoreCommodityBySize(int pageNum,int pageSize);
+	
+	/**
+	 * 修改商品的状态 上下架
+	 * @param id 将要被修改的商品的id
+	 * @param state 修改商品的状态
+	 * @return 返回操作是否成功
+	 */
+	boolean updateCommodityState(Integer id,Integer state);
 }
