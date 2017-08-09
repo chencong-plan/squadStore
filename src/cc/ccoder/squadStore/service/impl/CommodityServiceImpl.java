@@ -25,4 +25,44 @@ public class CommodityServiceImpl implements ICommodityService {
 		return iCommodityDao.getMoreCommodityBySize(pageNum, pageSize);
 	}
 
+	@Override
+	public boolean insertCommodity(Commodity commodity) {
+		if (commodity == null) {
+			return false;
+		}
+		return iCommodityDao.insertCommodity(commodity);
+	}
+
+	@Override
+	public boolean updateCommodity(Commodity commodity) {
+		if (commodity == null) {
+			return false;
+		}
+		return iCommodityDao.updateCommodity(commodity);
+	}
+
+	@Override
+	public boolean updateCommodityState(Integer id, Integer state) {
+		if (id == null || state == null) {
+			return false;
+		}
+		return iCommodityDao.updateCommodityState(id, state);
+	}
+
+	@Override
+	public Commodity getSimpleCommodity(Integer id) {
+		if (id == null) {
+			return null;
+		}
+		return iCommodityDao.getSimpleCommodity(id);
+	}
+
+	@Override
+	public boolean deleteCommodity(Integer id) {
+		if (id == null) {
+			return false;
+		}
+		return iCommodityDao.deleteCommodity(id);
+	}
+
 }

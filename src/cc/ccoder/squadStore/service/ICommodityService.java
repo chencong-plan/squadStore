@@ -20,5 +20,42 @@ public interface ICommodityService {
 	 */
 	List<Commodity> getMoreCommodityBySize(int pageNum,int pageSize);
 	
+	/**
+	 * 新增一条commodity记录
+	 * @param commodity 将要被新增的实体信息
+	 * @return 返回该操作是否成功
+	 */
+	boolean insertCommodity(Commodity commodity);
+	
+	/**
+	 * 更新commodity实体信息,可以是修改信息，可以是上下架
+	 * @param commodity 将要被更新的实体信息
+	 * @return 返回该操作是否成功
+	 */
+	boolean updateCommodity(Commodity commodity);
+	
+
+	/**
+	 * 修改商品的状态 上下架
+	 * @param id 将要被修改的商品的id
+	 * @param state 修改商品的状态
+	 * @return 返回操作是否成功
+	 */
+	boolean updateCommodityState(Integer id,Integer state);
+	
+	/**
+	 * 根据商品ID获得到该商品的详细信息
+	 * @param id 指定商品的ID
+	 * @return 返回指定商品ID的实体信息
+	 */
+	Commodity getSimpleCommodity(Integer id);
+	
+	/**
+	 * 根据商品的id 将删除商品
+	 * @param id
+	 * @return
+	 */
+	boolean deleteCommodity(Integer id);
+	
 	
 }

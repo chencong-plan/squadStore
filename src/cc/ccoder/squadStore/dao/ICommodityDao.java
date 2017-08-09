@@ -53,4 +53,11 @@ public interface ICommodityDao {
 	 * @return 返回操作是否成功
 	 */
 	boolean updateCommodityState(Integer id,Integer state);
+	
+	/**
+	 * 根据商品的id 将删除商品
+	 * @param id
+	 * @return
+	 */
+	boolean deleteCommodity(Integer id);
 }
