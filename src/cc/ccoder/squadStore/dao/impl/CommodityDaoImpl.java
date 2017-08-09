@@ -5,6 +5,7 @@ import java.util.List;
 import cc.ccoder.squadStore.dao.ICommodityDao;
 import cc.ccoder.squadStore.entity.Commodity;
 import cc.ccoder.squadStore.util.DBOperatorUtils;
+import cc.ccoder.squadStore.util.DateUtils;
 
 public class CommodityDaoImpl implements ICommodityDao {
 
@@ -25,7 +26,7 @@ public class CommodityDaoImpl implements ICommodityDao {
 
 	@Override
 	public boolean updateCommodity(Commodity commodity) {
-		String sql = "update commodtity set name=?,state=?,price=?,describe=?,pricture=?,updtedTime=? where id = ?";
+		String sql = "update commodity set name=?,state=?,price=?,describe=?,pricture=?,updatedTime=? where id = ?";
 		List<Object> params = Arrays.asList(
 				commodity.getName(),
 				commodity.getState(),
@@ -39,22 +40,23 @@ public class CommodityDaoImpl implements ICommodityDao {
 
 	@Override
 	public Commodity getSimpleCommodity(Integer id) {
-		String sql = "select * from address where id = ?";
+		String sql = "select * from commodity where id = ?";
 		List<Object> params = Arrays.asList(id);
 		return DBOperatorUtils.getSimpleResult(sql, params, Commodity.class);
 	}
 
 	@Override
 	public List<Commodity> getMoreCommodityInfos() {
-		String sql = "select * from commodity 1=?";
-		List<Object> params = Arrays.asList(1);
+		String sql = "select * from commodity";
+		List<Object> params = Arrays.asList();
 		return DBOperatorUtils.getMoreResult(sql, params, Commodity.class);
 	}
 
 	@Override
 	public List<Commodity> getMoreCommodityBySize(int pageNum, int pageSize) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "{call usp_getCommodityBySize(?,?)}";
+		List<Object> params = Arrays.asList(pageNum,pageSize);
+		return DBOperatorUtils.getMoreResultProcByPage(sql, params, Commodity.class);
 	}
 
 	@Override
@@ -64,4 +66,28 @@ public class CommodityDaoImpl implements ICommodityDao {
 		return DBOperatorUtils.excuteUpdateResult(sql, params);
 	}
 
+	
+	public static void main(String[] args) {
+		CommodityDaoImpl commodityDaoImpl = new CommodityDaoImpl();
+		Commodity commodity = new Commodity();
+		commodity.setId(1);
+		commodity.setName("鸡米饭");
+		commodity.setPrice(24.5);
+		commodity.setDescribe("好吃不贵黄焖鸡米饭,好吃不贵黄焖鸡米饭");
+		commodity.setPricture("");
+		commodity.setState(0);
+//		commodity.setCreatedTime(DateUtils.getNowTime());
+		commodity.setUpdatedTime(DateUtils.getNowTime());
+		commodity.setStoreId(1);
+//		System.out.println(commodityDaoImpl.insertCommodity(commodity));
+//		System.out.println(commodityDaoImpl.updateCommodity(commodity));
+		//System.out.println(commodityDaoImpl.getSimpleCommodity(1));
+//		for (Commodity commodityItem : commodityDaoImpl.getMoreCommodityInfos()) {
+//			System.out.println(commodityItem);
+//		}
+		//System.out.println(commodityDaoImpl.updateCommodityState(2, 0));
+		for(Commodity com:commodityDaoImpl.getMoreCommodityBySize(2, 1)){
+			System.out.println(com);
+		}
+	}
 }

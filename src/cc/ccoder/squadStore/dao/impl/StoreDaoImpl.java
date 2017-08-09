@@ -18,7 +18,7 @@ public class StoreDaoImpl implements IStoreDao {
 
 	@Override
 	public boolean updateStore(Store store) {
-		String sql = "update store set password=?,sotrename=?,phone=?, address=?,describe=? where id = ?";
+		String sql = "update store set password=?,storename=?,phone=?, address=?,describe=? where id = ?";
 		List<Object> params = Arrays.asList(
 				store.getPassword(),
 				store.getStorename(),
@@ -27,6 +27,22 @@ public class StoreDaoImpl implements IStoreDao {
 				store.getDescribe(),
 				store.getId());
 		return DBOperatorUtils.excuteUpdateResult(sql, params);
+	}
+	
+	public static void main(String[] args) {
+		StoreDaoImpl daoImpl = new StoreDaoImpl();
+		//Store Store = daoImpl.storeLogin("admin", "admin");
+		//System.out.println(Store);
+		//daoImpl.updateStore(store);
+		Store store = new Store();
+		store.setId(1);
+		store.setUsername("admin");
+		store.setPassword("admin");
+		store.setSotrename("黄焖鸡");
+		store.setPhone("123");
+		store.setAddress("江大");
+		System.out.println(daoImpl.updateStore(store));
+		//System.out.println(daoImpl.updateStore(store));
 	}
 
 }

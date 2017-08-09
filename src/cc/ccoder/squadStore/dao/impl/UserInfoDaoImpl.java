@@ -53,6 +53,13 @@ public class UserInfoDaoImpl implements IUserInfoDao {
 
 	public static void main(String[] args) {
 		UserInfoDaoImpl userInfoDaoImpl = new UserInfoDaoImpl();
-		System.out.println(userInfoDaoImpl.getSimpleUserInfo("chencong"));
+		//System.out.println(userInfoDaoImpl.loginByUserInfo("chencong", "123456"));
+		//System.out.println(userInfoDaoImpl.getSimpleUserInfo("chencong"));
+		//System.out.println(userInfoDaoImpl.loginByUserInfo("chencong", "123456"));
+		UserInfo userInfo = new UserInfo();
+		userInfo.setId(1);
+		userInfo.setUsername("chencong");
+		userInfo.setPassword("123456");
+		System.out.println(userInfoDaoImpl.updateUserInfo(userInfo));
 	}
 }

@@ -9,7 +9,9 @@ public enum ConstInfo {
 	USERNAME_EXISTS("用户名已经存在",4),
 	USER_NOT_LOGIN("用户未登录",5),
 	ERROR("操作失败",6),
-	SUCCESS("操作成功",7);
+	SUCCESS("操作成功",7),
+	FILE_PATH("user_login.txt",8);
+	
 	
 	private String name;
 	private int index;

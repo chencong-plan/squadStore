@@ -38,4 +38,11 @@ public interface IUserInfoService {
 	 * @return 返回操作结果枚举
 	 */
 	Integer updateUserInfo(UserInfo userInfo);
+	
+	/**
+	 * 注册时候判断用户名是否已经存在于数据库当中 如果存在则不允许注册
+	 * @param username 将要进行验证的用户名
+	 * @return 返回当前验证的用户名是否存在
+	 */
+	boolean isExistsUserName(String username);
 }

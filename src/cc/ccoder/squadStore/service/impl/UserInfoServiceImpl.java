@@ -1,5 +1,7 @@
 package cc.ccoder.squadStore.service.impl;
 
+import static org.hamcrest.CoreMatchers.nullValue;
+
 import cc.ccoder.squadStore.comm.ConstInfo;
 import cc.ccoder.squadStore.dao.IUserInfoDao;
 import cc.ccoder.squadStore.dao.impl.UserInfoDaoImpl;
@@ -74,6 +76,21 @@ public class UserInfoServiceImpl implements IUserInfoService {
 			return ConstInfo.ERROR.getIndex();
 		}
 		return ConstInfo.SUCCESS.getIndex();
+	}
+
+	/**
+	 * 校验输入的用户名是否存在于数据库当中
+	 */
+	@Override
+	public boolean isExistsUserName(String username) {
+		if (username == null) {
+			return false;
+		}
+		UserInfo userInfo = iUserInfoDao.getSimpleUserInfo(username);
+		if (userInfo != null) {
+			return false;
+		}
+		return true;
 	}
 
 }
