@@ -52,6 +52,11 @@ public class CommodityManageJF extends JFrame {
 	private JLabel label_nextPage;
 	private JLabel label_nowPage;
 
+	// 初始化pageSize 和 pageNum
+	private int pageNum = 1;
+	private int pageSize = 10;
+	private int pageSum ;
+
 	/**
 	 * Launch the application.
 	 */
@@ -103,8 +108,17 @@ public class CommodityManageJF extends JFrame {
 		btn_update.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				UpdateCommodityJF uJf = new UpdateCommodityJF();
-				uJf.setVisible(true);
+				int rowNum = table.getSelectedRow();
+				if (rowNum >= 0) {
+					int id = (int) tableModel.getValueAt(rowNum, 0);
+					UpdateCommodityJF.commodityId = id;
+					UpdateCommodityJF uJf = new UpdateCommodityJF();
+					uJf.setVisible(true);
+					CommodityManageJF.this.dispose();
+				} else {
+					JOptionPane.showMessageDialog(CommodityManageJF.this, "未选中任何行");
+				}
+				initModel(pageNum,pageSize);
 			}
 		});
 
@@ -136,7 +150,7 @@ public class CommodityManageJF extends JFrame {
 						} else {
 							JOptionPane.showMessageDialog(CommodityManageJF.this, "操作不成功,部分下架");
 						}
-						initModel();
+						initModel(pageNum,pageSize);
 					}
 				} else {
 					JOptionPane.showConfirmDialog(CommodityManageJF.this, "未选中任何行", "提示", JOptionPane.YES_OPTION,
@@ -172,7 +186,7 @@ public class CommodityManageJF extends JFrame {
 							JOptionPane.showMessageDialog(CommodityManageJF.this, "操作不成功,部分删除");
 						}
 					}
-					initModel();
+					initModel(pageNum,pageSize);
 				} else {
 					JOptionPane.showMessageDialog(CommodityManageJF.this, "没选中任何行");
 				}
@@ -189,32 +203,40 @@ public class CommodityManageJF extends JFrame {
 		panel.add(scrollPane);
 
 		table = new JTable();
+		table.setRowHeight(30);
 		String[] objs = new String[] { "编号", "名称", "状态", "价格", "介绍", "图片", "上架时间", "更新时间" };
 		tableModel = new DefaultTableModel(objs, 0);
-		initModel();
+		initModel(pageNum,pageSize);
 		// table的点击事件
-//		table.addMouseListener(new MouseClickEvent(table, tableModel));
-		
+		// table.addMouseListener(new MouseClickEvent(table, tableModel));
+
 		label_proPage = new JLabel("上一页");
 		label_proPage.setFont(new Font("楷体", Font.PLAIN, 15));
 		label_proPage.setBounds(293, 433, 57, 18);
 		contentPane.add(label_proPage);
-		
+		label_proPage.addMouseListener(new MouseClickProPage());
+
+
 		label_nextPage = new JLabel("下一页");
 		label_nextPage.setFont(new Font("楷体", Font.PLAIN, 15));
 		label_nextPage.setBounds(446, 435, 57, 18);
 		contentPane.add(label_nextPage);
-		
-		label_nowPage = new JLabel("1");
+		label_nextPage.addMouseListener(new MouseClickNextPage());
+
+		//显示当前页数 和 总页数
+		pageSum = iCommodityService.getMoreCommodityInfos().size();
+		label_nowPage = new JLabel("");
+		label_nowPage.setText(pageNum+" / "+(pageSum/pageSize));
 		label_nowPage.setFont(new Font("楷体", Font.PLAIN, 15));
-		label_nowPage.setBounds(389, 433, 22, 18);
+		label_nowPage.setBounds(360, 433, 68, 18);
 		contentPane.add(label_nowPage);
 
 	}
 
-	public void initModel() {
+	// 全部数据查询
+	public void initModel(int pageNum,int pageSize) {
 		tableModel.setRowCount(0);
-		for (Commodity commodity : iCommodityService.getMoreCommodityInfos()) {
+		for (Commodity commodity : iCommodityService.getMoreCommodityBySize(pageNum, pageSize)) {
 			tableModel.addRow(new Object[] { commodity.getId(), commodity.getName(), commodity.getState(),
 					commodity.getPrice(), commodity.getDescribe(), commodity.getPricture(), commodity.getCreatedTime(),
 					commodity.getUpdatedTime() });
@@ -222,78 +244,83 @@ public class CommodityManageJF extends JFrame {
 		table.setModel(tableModel);
 		scrollPane.setViewportView(table);
 	}
+	
+	
+	
+	
+	class MouseClickNextPage implements MouseListener{
 
-//	// 内部内实现MouseListener接口
-//	class MouseClickEvent extends JFrame implements MouseListener {
-//		/**
-//		 * 
-//		 */
-//		private static final long serialVersionUID = 1L;
-//		private JTable table;
-//		private DefaultTableModel tableModel;
-//		private ICommodityService iCommodityService = new CommodityServiceImpl();
-//
-//		public MouseClickEvent(JTable table, DefaultTableModel tableModel) {
-//			this.table = table;
-//			this.tableModel = tableModel;
-//		}
-//
-//		@Override
-//		public void mouseClicked(MouseEvent e) {
-//			System.out.println("点击");
-//			if (e.getClickCount() == 2) {
-//				System.out.println("双击");
-//				// 双击
-//				// 获得到当前行
-//				int row = table.getSelectedRow();
-//				// 获得到当前行的id
-//				int id = (int) tableModel.getValueAt(row, 0);
-//				// 遍历这一行的所有列 并将其写入对象中
-//				int cols = table.getColumnCount();
-//				Commodity commodity = new Commodity();
-//				commodity.setId(id);
-//				commodity.setName((String) tableModel.getValueAt(row, 1));
-//				commodity.setState((int) tableModel.getValueAt(row, 2));
-//				commodity.setPrice((double) tableModel.getValueAt(row, 3));
-//				commodity.setDescribe((String) tableModel.getValueAt(row, 4));
-//				commodity.setPricture((String) tableModel.getValueAt(row, 5));
-//				commodity.setUpdatedTime(DateUtils.getNowTime());
-//				boolean flag = iCommodityService.updateCommodity(commodity);
-//				if (flag) {
-//					JOptionPane.showMessageDialog(MouseClickEvent.this, "操作成功");
-//					CommodityManageJF.this.initModel();
-//				}
-//			}
-//		}
-//
-//		@Override
-//		public void mouseEntered(MouseEvent e) {
-//			// TODO Auto-generated method stub
-////			System.out.println("进入table");
-//
-//		}
-//
-//		@Override
-//		public void mouseExited(MouseEvent e) {
-//			// TODO Auto-generated method stub
-////			System.out.println("退出table");
-//
-//		}
-//
-//		@Override
-//		public void mousePressed(MouseEvent e) {
-//			// TODO Auto-generated method stub
-////			System.out.println("鼠标按下");
-//
-//		}
-//
-//		@Override
-//		public void mouseReleased(MouseEvent e) {
-//			// TODO Auto-generated method stub
-////			System.out.println("鼠标松开");
-//
-//		}
-//
-//	}
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if (pageNum < (pageSum/pageSize)) {
+				pageNum++;
+			}
+			initModel(pageNum,pageSize);
+			label_nowPage.setText(pageNum+" / "+(pageSum/pageSize));
+		}
 
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+
+	class MouseClickProPage implements MouseListener{
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if (pageNum > 1) {
+				pageNum--;
+			}
+			initModel(pageNum,pageSize);
+			label_nowPage.setText(pageNum+" / "+(pageSum/pageSize));
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
 }
+
+
+

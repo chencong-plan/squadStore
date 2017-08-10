@@ -64,5 +64,12 @@ public class CommodityServiceImpl implements ICommodityService {
 		}
 		return iCommodityDao.deleteCommodity(id);
 	}
+	
+	public static void main(String[] args) {
+		CommodityServiceImpl commodityServiceImpl  = new CommodityServiceImpl();
+		for (Commodity commodity : commodityServiceImpl.getMoreCommodityBySize(1, 10)) {
+			System.out.println(commodity);
+		}
+	}
 
 }

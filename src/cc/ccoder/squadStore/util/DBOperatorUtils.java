@@ -253,7 +253,7 @@ public class DBOperatorUtils {
 //		List<Object> params = Arrays.asList(user.getName());
 //		System.out.println(DBOperatorUtils.excuteUpdateResult(sql, params));
 		int pageNum = 2;
-		int pageSize = 1;
+		int pageSize = 5;
 		String sql = "{call usp_getCommodityBySize(?,?)}";
 		List<Object> params = Arrays.asList(pageNum,pageSize);
 		for (Commodity commodity : getMoreResultProcByPage(sql, params, Commodity.class)) {

@@ -163,7 +163,7 @@ public class AddCommodityJF extends JFrame {
 								AddCommodityJF.this.dispose();
 								CommodityManageJF cJf = new CommodityManageJF();
 								cJf.setVisible(true);
-								cJf.initModel();
+								cJf.initModel(1,10);
 							}
 						}else {
 							JOptionPane.showConfirmDialog(AddCommodityJF.this, "新增商品失败","提示",JOptionPane.YES_OPTION,JOptionPane.ERROR_MESSAGE);
