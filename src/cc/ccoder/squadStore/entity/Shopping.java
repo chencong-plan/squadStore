@@ -1,4 +1,4 @@
-package cc.ccoder.squadStore.entity;
+	package cc.ccoder.squadStore.entity;
 
 /**
  * 

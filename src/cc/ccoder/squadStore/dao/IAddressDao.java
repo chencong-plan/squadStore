@@ -56,6 +56,14 @@ public interface IAddressDao {
 	 */
 	boolean deleteAddress(Integer id);
 	
+	/**
+	 * 根据用户id 和状态id 获得该用户的默认地址信息
+	 * @param userId 用户id
+	 * @param state 默认地址状态 1
+	 * @return 返回该用户的默认地址实体信息
+	 */
+	Address getSimpleAddressByuserIdAndState(Integer userId,Integer state);
+	
 }
 
 

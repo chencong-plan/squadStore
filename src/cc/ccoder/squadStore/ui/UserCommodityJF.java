@@ -11,16 +11,23 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import cc.ccoder.squadStore.entity.Address;
 import cc.ccoder.squadStore.entity.Commodity;
+import cc.ccoder.squadStore.entity.Order;
 import cc.ccoder.squadStore.entity.Shopping;
 import cc.ccoder.squadStore.entity.UserInfo;
+import cc.ccoder.squadStore.service.IAddressService;
 import cc.ccoder.squadStore.service.ICommodityService;
+import cc.ccoder.squadStore.service.IOrderService;
 import cc.ccoder.squadStore.service.IShoppingService;
 import cc.ccoder.squadStore.service.IUserInfoService;
+import cc.ccoder.squadStore.service.impl.AddressServiceImpl;
 import cc.ccoder.squadStore.service.impl.CommodityServiceImpl;
+import cc.ccoder.squadStore.service.impl.OrderServiceImpl;
 import cc.ccoder.squadStore.service.impl.ShoppingServiceImpl;
 import cc.ccoder.squadStore.service.impl.UserInfoServiceImpl;
 import cc.ccoder.squadStore.util.DateUtils;
+import cc.ccoder.squadStore.util.FileUtils;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -47,6 +54,10 @@ public class UserCommodityJF extends JFrame {
 	private IUserInfoService iUserInfoService = new UserInfoServiceImpl();
 	// 注入购物车service接口
 	private IShoppingService iShoppingService = new ShoppingServiceImpl();
+	// 注入用户地址service接口
+	private IAddressService iAddressService = new AddressServiceImpl();
+	//注入 用户订单service
+	private IOrderService iOrderService = new OrderServiceImpl();
 
 	private JPanel contentPane;
 	private JTable table;
@@ -149,6 +160,12 @@ public class UserCommodityJF extends JFrame {
 		btn_addOrder.setFont(new Font("楷体", Font.PLAIN, 15));
 		btn_addOrder.setBounds(497, 421, 107, 30);
 		contentPane.add(btn_addOrder);
+		btn_addOrder.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addToOrder();
+			}
+		});
 
 		btn_addShopping = new JButton("添加购物车");
 		btn_addShopping.setFont(new Font("楷体", Font.PLAIN, 15));
@@ -182,6 +199,72 @@ public class UserCommodityJF extends JFrame {
 	}
 
 	/**
+	 * 下单商品
+	 */
+	public void addToOrder() {
+		int rowNum = table.getSelectedRow();
+		if (rowNum < 0) {
+			JOptionPane.showMessageDialog(UserCommodityJF.this, "你还没有选中任何行");
+			return;
+		}
+		int commodityId = (int) tableModel.getValueAt(rowNum, 0);
+		Commodity commodity = iCommodityService.getSimpleCommodity(commodityId);
+		if (commodity == null) {
+			return;
+		}
+		double price = commodity.getPrice();
+		
+		// 登录时候将用户名存储在文件当中 现在使用登录用户的id
+		String username = FileUtils.getSomeByFile("user_login.txt");
+		if (username == null || "".equals(username)) {
+			return;
+		}
+		UserInfo userInfo = iUserInfoService.getSimpleUserInfo(username);
+		if (userInfo == null) {
+			return;
+		}
+		Address address = iAddressService.getSimpleAddressByuserIdAndState(userInfo.getId(), 1);
+		if (address == null) {
+			return;
+		}
+		int addressId = address.getId();
+		// 获得数量
+		String result = JOptionPane.showInputDialog(UserCommodityJF.this, "将要下单数量：");
+		int number = 0;
+		try {
+			number = Integer.parseInt(result);
+			if (number <= 0) {
+				JOptionPane.showMessageDialog(UserCommodityJF.this, "请输入正确的数量");
+				return;
+			}
+		} catch (Exception e) {
+			return;
+		}
+		Order order = new Order();
+		order.setUserId(userInfo.getId());
+		order.setCommodityId(commodityId);
+		order.setAddressId(addressId);
+		order.setPrice(price);
+		order.setNumber(number);
+		order.setTotalPrice(number * price);
+		order.setDeliverState(0);
+		order.setState(0);
+		order.setCreatedTime(DateUtils.getNowTime());
+		order.setUpdatedTime(DateUtils.getNowTime());
+		boolean flag = iOrderService.addToOrder(order);
+		if (!flag) {
+			JOptionPane.showMessageDialog(UserCommodityJF.this, "添加失败");
+			return;
+		}
+		int check = JOptionPane.showConfirmDialog(UserCommodityJF.this, "下单成功，是否前去订单表？ ","提示",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE);
+		if (check == 0) {
+			UserInfoCenterJF uCenterJF = new UserInfoCenterJF();
+			uCenterJF.setVisible(true);
+			UserCommodityJF.this.dispose();
+		}
+	}
+
+	/**
 	 * 添加商品进入购物车
 	 */
 	public void addToShopping() {
@@ -208,7 +291,7 @@ public class UserCommodityJF extends JFrame {
 									JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 							if (num == 0) {
 								// 前往个人中心 打开购物车
-								//System.out.println("前往购物车");
+								// System.out.println("前往购物车");
 								UserInfoCenterJF userInfoCenterJF = new UserInfoCenterJF();
 								userInfoCenterJF.setVisible(true);
 								UserCommodityJF.this.dispose();
