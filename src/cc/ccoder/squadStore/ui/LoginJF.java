@@ -120,37 +120,7 @@ public class LoginJF extends JFrame {
 		btn_login.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// 用户登录
-				String username = field_username.getText();
-				String password = new String(field_password.getPassword());
-				if (username.equals("") || password.equals("")) {
-					JOptionPane.showConfirmDialog(LoginJF.this, "输入框不能够为空", "提示", JOptionPane.YES_NO_OPTION,
-							JOptionPane.INFORMATION_MESSAGE);
-					return;
-				} else {
-					if (rdbtn_user.isSelected()) {
-						// 用户登录
-						if (iUserInfoService.isLogin(username, password)) {
-							System.out.println("登录成功");
-							// 就将当前登录的用户信息写入指定文件当中
-							FileUtils.setSomeByFile(ConstInfo.FILE_PATH.getName(), username);
-							// 然后跳转到主页面--个人中心
-						} else {
-							JOptionPane.showConfirmDialog(LoginJF.this, "用户名或者密码错误", "登录失败", JOptionPane.YES_NO_OPTION,
-									JOptionPane.ERROR_MESSAGE);
-						}
-					}
-					if (rdbtn_store.isSelected()) {
-						// 商家登录
-						if (iStoreService.isStoreLogin(username, password)) {
-							System.out.println("登录成功");
-							// 跳转到商家管理页面
-						} else {
-							JOptionPane.showConfirmDialog(LoginJF.this, "用户名或者密码错误", "登录失败", JOptionPane.YES_NO_OPTION,
-									JOptionPane.ERROR_MESSAGE);
-						}
-					}
-				}
+				login();
 			}
 		});
 
@@ -183,4 +153,49 @@ public class LoginJF extends JFrame {
 			}
 		});
 	}
+
+	
+	
+	public void login() {
+		// 用户登录
+		String username = field_username.getText();
+		String password = new String(field_password.getPassword());
+		if (username.equals("") || password.equals("")) {
+			JOptionPane.showConfirmDialog(LoginJF.this, "输入框不能够为空", "提示", JOptionPane.YES_NO_OPTION,
+					JOptionPane.INFORMATION_MESSAGE);
+			return;
+		} else {
+			if (rdbtn_user.isSelected()) {
+				// 用户登录
+				if (iUserInfoService.isLogin(username, password)) {
+					// 就将当前登录的用户信息写入指定文件当中
+					FileUtils.setSomeByFile(ConstInfo.FILE_PATH.getName(), username);
+					// 然后跳转到主页面--购买页面 ---购买页面再往主页面跳转
+					// 将用户ID传递过去
+					UserCommodityJF.username = username;
+					UserCommodityJF userCommodityJF = new UserCommodityJF();
+					userCommodityJF.setVisible(true);
+					LoginJF.this.dispose();
+				} else {
+					JOptionPane.showConfirmDialog(LoginJF.this, "用户名或者密码错误", "登录失败", JOptionPane.YES_NO_OPTION,
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			if (rdbtn_store.isSelected()) {
+				// 商家登录
+				if (iStoreService.isStoreLogin(username, password)) {
+					System.out.println("登录成功");
+					// 跳转到商家管理页面
+				} else {
+					JOptionPane.showConfirmDialog(LoginJF.this, "用户名或者密码错误", "登录失败", JOptionPane.YES_NO_OPTION,
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		}
+	}
+
+	
+	
+	
+	
 }

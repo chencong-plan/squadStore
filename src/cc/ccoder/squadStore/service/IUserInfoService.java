@@ -45,4 +45,6 @@ public interface IUserInfoService {
 	 * @return 返回当前验证的用户名是否存在
 	 */
 	boolean isExistsUserName(String username);
+	
+	UserInfo getSimpleUserInfo(String username);
 }

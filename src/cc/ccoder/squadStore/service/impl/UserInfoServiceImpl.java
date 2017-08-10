@@ -93,4 +93,18 @@ public class UserInfoServiceImpl implements IUserInfoService {
 		return true;
 	}
 
+	@Override
+	public UserInfo getSimpleUserInfo(String username) {
+		if (username == null) {
+			return null;
+		}
+		UserInfo userInfo = iUserInfoDao.getSimpleUserInfo(username);
+		if (userInfo == null) {
+			return null;
+		}
+		return userInfo;
+	}
+	
+	
+
 }

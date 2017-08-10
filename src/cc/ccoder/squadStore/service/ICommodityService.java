@@ -57,5 +57,21 @@ public interface ICommodityService {
 	 */
 	boolean deleteCommodity(Integer id);
 	
+	/**
+	 * 进行分页处理，根据当前新式页数pageNum和每页显示大小PageSize进行分页查询商品信息
+	 * @param pageNum 当前显示页数
+	 * @param pageSize 每页显示大小
+	 * @return 返回指定分页信息的结果集
+	 */
+	List<Commodity> getMoreCommodityByOnShelf(int pageNum,int pageSize);
+	
+	/**
+	 * 进行分页处理，根据当前新式页数pageNum和每页显示大小PageSize进行分页查询商品信息
+	 * @param pageNum 当前显示页数
+	 * @param pageSize 每页显示大小
+	 * @return 返回指定分页信息的结果集
+	 */
+	List<Commodity> getMoreCommodityByOffShelf(int pageNum,int pageSize);
+	
 	
 }

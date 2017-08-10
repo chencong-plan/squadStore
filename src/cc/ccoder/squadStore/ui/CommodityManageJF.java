@@ -18,6 +18,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import cc.ccoder.squadStore.entity.Commodity;
@@ -55,7 +56,7 @@ public class CommodityManageJF extends JFrame {
 	// 初始化pageSize 和 pageNum
 	private int pageNum = 1;
 	private int pageSize = 10;
-	private int pageSum ;
+	private int pageSum;
 
 	/**
 	 * Launch the application.
@@ -118,7 +119,7 @@ public class CommodityManageJF extends JFrame {
 				} else {
 					JOptionPane.showMessageDialog(CommodityManageJF.this, "未选中任何行");
 				}
-				initModel(pageNum,pageSize);
+				initModel(pageNum, pageSize);
 			}
 		});
 
@@ -150,7 +151,7 @@ public class CommodityManageJF extends JFrame {
 						} else {
 							JOptionPane.showMessageDialog(CommodityManageJF.this, "操作不成功,部分下架");
 						}
-						initModel(pageNum,pageSize);
+						initModel(pageNum, pageSize);
 					}
 				} else {
 					JOptionPane.showConfirmDialog(CommodityManageJF.this, "未选中任何行", "提示", JOptionPane.YES_OPTION,
@@ -186,7 +187,7 @@ public class CommodityManageJF extends JFrame {
 							JOptionPane.showMessageDialog(CommodityManageJF.this, "操作不成功,部分删除");
 						}
 					}
-					initModel(pageNum,pageSize);
+					initModel(pageNum, pageSize);
 				} else {
 					JOptionPane.showMessageDialog(CommodityManageJF.this, "没选中任何行");
 				}
@@ -203,10 +204,16 @@ public class CommodityManageJF extends JFrame {
 		panel.add(scrollPane);
 
 		table = new JTable();
+
+		// 内容居中显示
+		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+		r.setHorizontalAlignment(JLabel.CENTER);
+		table.setDefaultRenderer(Object.class, r);
+
 		table.setRowHeight(30);
 		String[] objs = new String[] { "编号", "名称", "状态", "价格", "介绍", "图片", "上架时间", "更新时间" };
 		tableModel = new DefaultTableModel(objs, 0);
-		initModel(pageNum,pageSize);
+		initModel(pageNum, pageSize);
 		// table的点击事件
 		// table.addMouseListener(new MouseClickEvent(table, tableModel));
 
@@ -216,17 +223,16 @@ public class CommodityManageJF extends JFrame {
 		contentPane.add(label_proPage);
 		label_proPage.addMouseListener(new MouseClickProPage());
 
-
 		label_nextPage = new JLabel("下一页");
 		label_nextPage.setFont(new Font("楷体", Font.PLAIN, 15));
 		label_nextPage.setBounds(446, 435, 57, 18);
 		contentPane.add(label_nextPage);
 		label_nextPage.addMouseListener(new MouseClickNextPage());
 
-		//显示当前页数 和 总页数
+		// 显示当前页数 和 总页数
 		pageSum = iCommodityService.getMoreCommodityInfos().size();
 		label_nowPage = new JLabel("");
-		label_nowPage.setText(pageNum+" / "+(pageSum/pageSize));
+		label_nowPage.setText(pageNum + " / " + (pageSum / pageSize));
 		label_nowPage.setFont(new Font("楷体", Font.PLAIN, 15));
 		label_nowPage.setBounds(360, 433, 68, 18);
 		contentPane.add(label_nowPage);
@@ -234,7 +240,7 @@ public class CommodityManageJF extends JFrame {
 	}
 
 	// 全部数据查询
-	public void initModel(int pageNum,int pageSize) {
+	public void initModel(int pageNum, int pageSize) {
 		tableModel.setRowCount(0);
 		for (Commodity commodity : iCommodityService.getMoreCommodityBySize(pageNum, pageSize)) {
 			tableModel.addRow(new Object[] { commodity.getId(), commodity.getName(), commodity.getState(),
@@ -244,83 +250,69 @@ public class CommodityManageJF extends JFrame {
 		table.setModel(tableModel);
 		scrollPane.setViewportView(table);
 	}
-	
-	
-	
-	
-	class MouseClickNextPage implements MouseListener{
+
+	class MouseClickNextPage implements MouseListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			if (pageNum < (pageSum/pageSize)) {
+			if (pageNum < (pageSum / pageSize)) {
 				pageNum++;
 			}
-			initModel(pageNum,pageSize);
-			label_nowPage.setText(pageNum+" / "+(pageSum/pageSize));
+			initModel(pageNum, pageSize);
+			label_nowPage.setText(pageNum + " / " + (pageSum / pageSize));
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+
 		}
 	}
 
-	class MouseClickProPage implements MouseListener{
+	class MouseClickProPage implements MouseListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (pageNum > 1) {
 				pageNum--;
 			}
-			initModel(pageNum,pageSize);
-			label_nowPage.setText(pageNum+" / "+(pageSum/pageSize));
+			initModel(pageNum, pageSize);
+			label_nowPage.setText(pageNum + " / " + (pageSum / pageSize));
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
 }
-
-
-

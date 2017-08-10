@@ -47,6 +47,22 @@ public interface ICommodityDao {
 	List<Commodity> getMoreCommodityBySize(int pageNum,int pageSize);
 	
 	/**
+	 * 进行分页处理，根据当前新式页数pageNum和每页显示大小PageSize进行分页查询商品信息
+	 * @param pageNum 当前显示页数
+	 * @param pageSize 每页显示大小
+	 * @return 返回指定分页信息的结果集
+	 */
+	List<Commodity> getMoreCommodityByOnShelf(int pageNum,int pageSize);
+	
+	/**
+	 * 进行分页处理，根据当前新式页数pageNum和每页显示大小PageSize进行分页查询商品信息
+	 * @param pageNum 当前显示页数
+	 * @param pageSize 每页显示大小
+	 * @return 返回指定分页信息的结果集
+	 */
+	List<Commodity> getMoreCommodityByOffShelf(int pageNum,int pageSize);
+	
+	/**
 	 * 修改商品的状态 上下架
 	 * @param id 将要被修改的商品的id
 	 * @param state 修改商品的状态

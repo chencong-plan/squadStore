@@ -60,6 +60,20 @@ public class CommodityDaoImpl implements ICommodityDao {
 		List<Object> params = Arrays.asList(id);
 		return DBOperatorUtils.excuteUpdateResult(sql, params);
 	}
+	
+	@Override
+	public List<Commodity> getMoreCommodityByOnShelf(int pageNum, int pageSize) {
+		String sql = "{call usp_getOnShelfCommodityBySize(?,?)}";
+		List<Object> params = Arrays.asList(pageNum, pageSize);
+		return DBOperatorUtils.getMoreResultProcByPage(sql, params, Commodity.class);
+	}
+
+	@Override
+	public List<Commodity> getMoreCommodityByOffShelf(int pageNum, int pageSize) {
+		String sql = "{call usp_getOffShelfCommodityBySize(?,?)}";
+		List<Object> params = Arrays.asList(pageNum, pageSize);
+		return DBOperatorUtils.getMoreResultProcByPage(sql, params, Commodity.class);
+	}
 
 	public static void main(String[] args) {
 		CommodityDaoImpl commodityDaoImpl = new CommodityDaoImpl();
@@ -89,5 +103,7 @@ public class CommodityDaoImpl implements ICommodityDao {
 		// describe,pricture,createdTime,updatedTime) values(1,'小辣椒',0,24.5,'好吃' at line
 		// 1
 	}
+
+
 
 }

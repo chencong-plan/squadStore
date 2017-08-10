@@ -65,11 +65,30 @@ public class CommodityServiceImpl implements ICommodityService {
 		return iCommodityDao.deleteCommodity(id);
 	}
 	
+	
+	@Override
+	public List<Commodity> getMoreCommodityByOnShelf(int pageNum, int pageSize) {
+		if (pageNum <= 0 || pageSize <=0) {
+			return null;
+		}
+		return iCommodityDao.getMoreCommodityByOnShelf(pageNum, pageSize);
+	}
+
+	@Override
+	public List<Commodity> getMoreCommodityByOffShelf(int pageNum, int pageSize) {
+		if (pageNum <= 0 || pageSize <=0) {
+			return null;
+		}
+		return iCommodityDao.getMoreCommodityByOffShelf(pageNum, pageSize);
+	}
+	
 	public static void main(String[] args) {
 		CommodityServiceImpl commodityServiceImpl  = new CommodityServiceImpl();
 		for (Commodity commodity : commodityServiceImpl.getMoreCommodityBySize(1, 10)) {
 			System.out.println(commodity);
 		}
 	}
+
+	
 
 }
