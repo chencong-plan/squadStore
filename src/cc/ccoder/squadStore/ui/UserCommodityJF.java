@@ -1,6 +1,5 @@
 package cc.ccoder.squadStore.ui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -26,7 +25,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -61,7 +59,6 @@ public class UserCommodityJF extends JFrame {
 	private JLabel label_proPage;
 	private JLabel label_pageNow;
 	private JLabel label_nextPage;
-	private JButton btn_addOrder;
 	private JButton btn_addShopping;
 
 	public static String username;
@@ -126,6 +123,31 @@ public class UserCommodityJF extends JFrame {
 		label_user.setFont(new Font("楷体", Font.PLAIN, 15));
 		label_user.setBounds(21, 10, 47, 40);
 		contentPane.add(label_user);
+		label_user.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				//点击头像 进入个人主页
+				UserCommodityJF.this.dispose();
+				UserInfoCenterJF userInfoCenterJF = new UserInfoCenterJF();
+				userInfoCenterJF.setVisible(true);
+			}
+		});
 
 		label_proPage = new JLabel("上一页");
 		label_proPage.setFont(new Font("楷体", Font.PLAIN, 15));
@@ -144,11 +166,6 @@ public class UserCommodityJF extends JFrame {
 		label_nextPage.setBounds(120, 423, 54, 18);
 		contentPane.add(label_nextPage);
 		label_nextPage.addMouseListener(new MouseClickNextPage());
-
-		btn_addOrder = new JButton("下单");
-		btn_addOrder.setFont(new Font("楷体", Font.PLAIN, 15));
-		btn_addOrder.setBounds(497, 421, 107, 30);
-		contentPane.add(btn_addOrder);
 
 		btn_addShopping = new JButton("添加购物车");
 		btn_addShopping.setFont(new Font("楷体", Font.PLAIN, 15));
@@ -208,7 +225,7 @@ public class UserCommodityJF extends JFrame {
 									JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 							if (num == 0) {
 								// 前往个人中心 打开购物车
-								//System.out.println("前往购物车");
+								// System.out.println("前往购物车");
 								UserInfoCenterJF userInfoCenterJF = new UserInfoCenterJF();
 								userInfoCenterJF.setVisible(true);
 								UserCommodityJF.this.dispose();
@@ -216,7 +233,7 @@ public class UserCommodityJF extends JFrame {
 							// 否则啥都不干
 						}
 					} else {
-						JOptionPane.showMessageDialog(UserCommodityJF.this, "加入购物车失败");
+						JOptionPane.showMessageDialog(UserCommodityJF.this, "加入购物车失败,您未登录");
 					}
 				} else {
 					JOptionPane.showMessageDialog(UserCommodityJF.this, "输入正确的数量");

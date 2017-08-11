@@ -13,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -24,9 +23,7 @@ import javax.swing.table.DefaultTableModel;
 import cc.ccoder.squadStore.entity.Commodity;
 import cc.ccoder.squadStore.service.ICommodityService;
 import cc.ccoder.squadStore.service.impl.CommodityServiceImpl;
-import cc.ccoder.squadStore.util.DateUtils;
 
-import javax.swing.JSplitPane;
 
 public class CommodityManageJF extends JFrame {
 
@@ -51,12 +48,16 @@ public class CommodityManageJF extends JFrame {
 	private DefaultTableModel tableModel;
 	private JLabel label_proPage;
 	private JLabel label_nextPage;
-	private JLabel label_nowPage;
+	private JLabel label_nowPage = new JLabel();
 
 	// 初始化pageSize 和 pageNum
 	private int pageNum = 1;
 	private int pageSize = 10;
-	private int pageSum;
+	private int pageSum = (int) Math.ceil(iCommodityService.getMoreCommodityInfos().size()/10.0);
+
+	public int getPageNum() {
+		return pageNum;
+	}
 
 	/**
 	 * Launch the application.
@@ -99,6 +100,8 @@ public class CommodityManageJF extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				AddCommodityJF addCommodityJF = new AddCommodityJF();
 				addCommodityJF.setVisible(true);
+				addCommodityJF.setCommodityManageJF(CommodityManageJF.this);
+				AddCommodityJF.pageSum = pageSum;
 			}
 		});
 
@@ -115,11 +118,12 @@ public class CommodityManageJF extends JFrame {
 					UpdateCommodityJF.commodityId = id;
 					UpdateCommodityJF uJf = new UpdateCommodityJF();
 					uJf.setVisible(true);
-					CommodityManageJF.this.dispose();
+					uJf.setCommodityManageJF(CommodityManageJF.this);
+//					CommodityManageJF.this.dispose();
 				} else {
 					JOptionPane.showMessageDialog(CommodityManageJF.this, "未选中任何行");
 				}
-				initModel(pageNum, pageSize);
+				//initModel(pageNum, pageSize);
 			}
 		});
 
@@ -211,9 +215,7 @@ public class CommodityManageJF extends JFrame {
 		table.setDefaultRenderer(Object.class, r);
 
 		table.setRowHeight(30);
-		String[] objs = new String[] { "编号", "名称", "状态", "价格", "介绍", "图片", "上架时间", "更新时间" };
-		tableModel = new DefaultTableModel(objs, 0);
-		initModel(pageNum, pageSize);
+		initModel(pageNum,pageSize);
 		// table的点击事件
 		// table.addMouseListener(new MouseClickEvent(table, tableModel));
 
@@ -229,18 +231,24 @@ public class CommodityManageJF extends JFrame {
 		contentPane.add(label_nextPage);
 		label_nextPage.addMouseListener(new MouseClickNextPage());
 
-		// 显示当前页数 和 总页数
-		pageSum = iCommodityService.getMoreCommodityInfos().size();
-		label_nowPage = new JLabel("");
-		label_nowPage.setText(pageNum + " / " + (pageSum / pageSize));
+		
+		
+		
 		label_nowPage.setFont(new Font("楷体", Font.PLAIN, 15));
 		label_nowPage.setBounds(360, 433, 68, 18);
 		contentPane.add(label_nowPage);
 
+	
+		
+		
 	}
 
 	// 全部数据查询
 	public void initModel(int pageNum, int pageSize) {
+		System.out.println("=======");
+		String[] objs = new String[] { "编号", "名称", "状态", "价格", "介绍", "图片", "上架时间", "更新时间" };
+		tableModel = new DefaultTableModel(objs, 0);
+		//initModel(pageNum, pageSize);
 		tableModel.setRowCount(0);
 		for (Commodity commodity : iCommodityService.getMoreCommodityBySize(pageNum, pageSize)) {
 			tableModel.addRow(new Object[] { commodity.getId(), commodity.getName(), commodity.getState(),
@@ -249,17 +257,22 @@ public class CommodityManageJF extends JFrame {
 		}
 		table.setModel(tableModel);
 		scrollPane.setViewportView(table);
+		// 显示当前页数 和 总页数
+		
+		label_nowPage.setText(pageNum + " / " + pageSum);
 	}
+	
+
 
 	class MouseClickNextPage implements MouseListener {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			if (pageNum < (pageSum / pageSize)) {
+			if (pageNum < (pageSum)) {
 				pageNum++;
 			}
 			initModel(pageNum, pageSize);
-			label_nowPage.setText(pageNum + " / " + (pageSum / pageSize));
+			label_nowPage.setText(pageNum + " / " + pageSum);
 		}
 
 		@Override
@@ -291,7 +304,7 @@ public class CommodityManageJF extends JFrame {
 				pageNum--;
 			}
 			initModel(pageNum, pageSize);
-			label_nowPage.setText(pageNum + " / " + (pageSum / pageSize));
+			label_nowPage.setText(pageNum + " / " + pageSum);
 		}
 
 		@Override

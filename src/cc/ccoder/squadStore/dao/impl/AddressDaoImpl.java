@@ -74,5 +74,21 @@ public class AddressDaoImpl implements IAddressDao {
 		List<Object> params = Arrays.asList(id);
 		return DBOperatorUtils.excuteUpdateResult(sql, params);
 	}
+	
+	@Override
+	public Address getSimpleAddressByuserIdAndState(Integer userId, Integer state) {
+		String sql = "select * from address where userId=? and state=?";
+		List<Object> params = Arrays.asList(userId,state);
+		return DBOperatorUtils.getSimpleResult(sql, params, Address.class);
+	}
 
+	
+	public static void main(String[] args) {
+		AddressDaoImpl addressDaoImpl = new AddressDaoImpl();
+		for (Address address : addressDaoImpl.getMoreAddressInfos(1)) {
+			System.out.println(address);
+		}
+	}
+
+	
 }

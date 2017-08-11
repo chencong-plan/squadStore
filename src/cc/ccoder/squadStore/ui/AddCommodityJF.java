@@ -1,6 +1,5 @@
 package cc.ccoder.squadStore.ui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -9,7 +8,6 @@ import javax.swing.border.EmptyBorder;
 
 import cc.ccoder.squadStore.entity.Commodity;
 import cc.ccoder.squadStore.service.ICommodityService;
-import cc.ccoder.squadStore.service.IStoreService;
 import cc.ccoder.squadStore.service.impl.CommodityServiceImpl;
 import cc.ccoder.squadStore.util.DateUtils;
 
@@ -38,8 +36,16 @@ public class AddCommodityJF extends JFrame {
 	private JRadioButton rdbtn_onShelf;
 	private JRadioButton rdbtn_offShelf;
 	
+	public static int pageSum;
+	
 	//将商品service注入进来
 	private ICommodityService iCommodityService = new CommodityServiceImpl();
+
+	private CommodityManageJF commodityManageJF;
+	
+	public void setCommodityManageJF(CommodityManageJF commodityManageJF) {
+		this.commodityManageJF = commodityManageJF;
+	}
 
 	/**
 	 * Launch the application.
@@ -139,12 +145,12 @@ public class AddCommodityJF extends JFrame {
 					JOptionPane.showConfirmDialog(AddCommodityJF.this, "信息需填写完整","提示",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE);
 				}else {
 					//判断是选择的上架还是下架
-					int state = 0;
+					int state = 1;
 					if (rdbtn_offShelf.isSelected()) {
-						state = 1;
+						state = 0;
 					}
 					if(rdbtn_onShelf.isSelected()) {
-						state = 0;
+						state = 1;
 					}
 					try {
 						double p = Double.parseDouble(price);
@@ -161,9 +167,7 @@ public class AddCommodityJF extends JFrame {
 							int num = JOptionPane.showConfirmDialog(AddCommodityJF.this, "新增商品成功,是否退出","提示",JOptionPane.YES_OPTION,JOptionPane.INFORMATION_MESSAGE);
 							if(num == 0) {
 								AddCommodityJF.this.dispose();
-								CommodityManageJF cJf = new CommodityManageJF();
-								cJf.setVisible(true);
-								cJf.initModel(1,10);
+								commodityManageJF.initModel(pageSum, 10);
 							}
 						}else {
 							JOptionPane.showConfirmDialog(AddCommodityJF.this, "新增商品失败","提示",JOptionPane.YES_OPTION,JOptionPane.ERROR_MESSAGE);

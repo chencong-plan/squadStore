@@ -1,16 +1,10 @@
-package cc.ccoder.squadStore.dao;
+package cc.ccoder.squadStore.service;
 
 import java.util.List;
 
 import cc.ccoder.squadStore.entity.Address;
 
-/**
- * 
- * @author chencong
- * @Time   2017年8月8日 下午2:24:56
- * @TODO 用户收货地址的接口
- */
-public interface IAddressDao {
+public interface IAddressService {
 
 	/**
 	 * 插入一条新的收货地址记录
@@ -63,10 +57,4 @@ public interface IAddressDao {
 	 * @return 返回该用户的默认地址实体信息
 	 */
 	Address getSimpleAddressByuserIdAndState(Integer userId,Integer state);
-	
 }
-
-
-
-
-

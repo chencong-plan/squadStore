@@ -1,6 +1,5 @@
 package cc.ccoder.squadStore.ui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -11,14 +10,27 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import cc.ccoder.squadStore.entity.Address;
+import cc.ccoder.squadStore.entity.Commodity;
+import cc.ccoder.squadStore.entity.OrderDetails;
 import cc.ccoder.squadStore.entity.Shopping;
+import cc.ccoder.squadStore.entity.UserInfo;
+import cc.ccoder.squadStore.service.IAddressService;
+import cc.ccoder.squadStore.service.ICommodityService;
+import cc.ccoder.squadStore.service.IOrderDetailsService;
 import cc.ccoder.squadStore.service.IShoppingService;
+import cc.ccoder.squadStore.service.IUserInfoService;
+import cc.ccoder.squadStore.service.impl.AddressServiceImpl;
+import cc.ccoder.squadStore.service.impl.CommodityServiceImpl;
+import cc.ccoder.squadStore.service.impl.OrderDetailsServiceImpl;
 import cc.ccoder.squadStore.service.impl.ShoppingServiceImpl;
+import cc.ccoder.squadStore.service.impl.UserInfoServiceImpl;
+import cc.ccoder.squadStore.util.FileUtils;
 
 import javax.swing.JButton;
 
@@ -27,6 +39,10 @@ public class UserInfoCenterJF extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private IShoppingService iShoppingService = new ShoppingServiceImpl();
+	private ICommodityService iCommodityService = new CommodityServiceImpl();
+	private IOrderDetailsService iOrderDetailsService = new OrderDetailsServiceImpl();
+	private IAddressService iAddressService = new AddressServiceImpl();
+	private IUserInfoService iUserInfoService = new UserInfoServiceImpl();
 
 	private JPanel contentPane;
 	private JTable table;
@@ -41,6 +57,9 @@ public class UserInfoCenterJF extends JFrame {
 	private JButton btn_userInfoCenter;
 	private JButton btn_order;
 	private JLabel label_userCenter;
+	private JButton btn_pay;
+	private JButton btn_back;
+	private JButton btn_addOrder;
 
 	/**
 	 * Launch the application.
@@ -69,88 +88,182 @@ public class UserInfoCenterJF extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		 label_userCenter = new JLabel("");
+		label_userCenter = new JLabel("");
 		label_userCenter.setFont(new Font("楷体", Font.PLAIN, 21));
-		label_userCenter.setBounds(369, 10, 109, 30);
+		label_userCenter.setBounds(10, 10, 109, 30);
 		contentPane.add(label_userCenter);
 
 		panel_shoppingOrder = new JPanel();
-		panel_shoppingOrder.setBounds(136, 43, 654, 447);
+		panel_shoppingOrder.setBounds(117, 43, 654, 408);
 		contentPane.add(panel_shoppingOrder);
 		panel_shoppingOrder.setLayout(null);
 
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 10, 644, 427);
+		scrollPane.setBounds(10, 10, 644, 398);
 		panel_shoppingOrder.add(scrollPane);
 
 		table = new JTable();
 
+		// 内容居中显示
+		DefaultTableCellRenderer r = new DefaultTableCellRenderer();
+		r.setHorizontalAlignment(JLabel.CENTER);
+		table.setDefaultRenderer(Object.class, r);
+
 		panel_userInfo = new JPanel();
-		panel_userInfo.setBounds(133, 43, 657, 447);
+		panel_userInfo.setBounds(133, 43, 657, 408);
 		contentPane.add(panel_userInfo);
 
 		btn_userInfoCenter = new JButton("个人信息");
 		btn_userInfoCenter.setFont(new Font("楷体", Font.PLAIN, 16));
-		btn_userInfoCenter.setBounds(10, 112, 97, 30);
+		btn_userInfoCenter.setBounds(510, 3, 120, 30);
 		contentPane.add(btn_userInfoCenter);
 		btn_userInfoCenter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				panel_shoppingOrder.setVisible(false);
 				label_userCenter.setText("个人中心");
+				btn_addOrder.setVisible(false);
+				btn_pay.setVisible(false);
 			}
 		});
 
+		// 点击购物车 显示购物车
 		btn_shopping = new JButton("购物车");
 		btn_shopping.setFont(new Font("楷体", Font.PLAIN, 16));
-		btn_shopping.setBounds(10, 186, 97, 30);
+		btn_shopping.setBounds(182, 3, 97, 30);
 		contentPane.add(btn_shopping);
 		btn_shopping.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				panel_shoppingOrder.setVisible(true);
 				initalModelShopping();
-				
+				//点击购物车  显示下单按钮
+				btn_addOrder.setVisible(true);
+				btn_pay.setVisible(false);
 			}
 		});
 
 		btn_order = new JButton("订单");
 		btn_order.setFont(new Font("楷体", Font.PLAIN, 16));
-		btn_order.setBounds(10, 267, 97, 30);
+		btn_order.setBounds(353, 3, 97, 30);
 		contentPane.add(btn_order);
 		btn_order.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				panel_shoppingOrder.setVisible(true);
 				initalModelOrder();
+				//点击订单按钮 显示支付按钮
+				btn_pay.setVisible(true);
+				btn_addOrder.setVisible(false);
 			}
 		});
+		
+
+		btn_pay = new JButton();
+		btn_pay.setText("支付");
+		btn_pay.setFont(new Font("楷体", Font.PLAIN, 16));
+		btn_pay.setBounds(10, 91, 93, 30);
+		contentPane.add(btn_pay);
+		btn_pay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		btn_pay.setVisible(false);
+		
+		btn_addOrder = new JButton("下单");
+		btn_addOrder.setFont(new Font("楷体", Font.PLAIN, 16));
+		btn_addOrder.setBounds(14, 91, 93, 30);
+		contentPane.add(btn_addOrder);
+		btn_addOrder.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//点击下单,添加商品进入订单详情表 同时在订单表里面生成一条订单记录,将订单表的主键ID写入订单详情表当中
+			}
+		});
+		btn_addOrder.setVisible(false);
+		
+
+		btn_back = new JButton("返回");
+		btn_back.setFont(new Font("楷体", Font.PLAIN, 16));
+		btn_back.setBounds(10, 421, 97, 30);
+		contentPane.add(btn_back);
+		btn_back.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				UserInfoCenterJF.this.dispose();
+				UserCommodityJF uJf = new UserCommodityJF();
+				uJf.setVisible(true);
+			}
+		});
+		
+		
 
 		// 默认加载购物车
 		initalModelShopping();
 	}
 
 	public void initalModelShopping() {
-		String[] objs = new String[] { "编号", "总价" };
+		String[] objs = new String[] { "编号", "名称", "数量", "单价", "总价", "下单时间" };
 		tableModelShopping = new DefaultTableModel(objs, 0);
 		table.setModel(tableModelShopping);
-		showShoppingModel();
+		showShoppingModel();// 显示购物车当中的数据
 		scrollPane.setViewportView(table);
 		label_userCenter.setText("购物车");
+		
 	}
 
 	public void initalModelOrder() {
-		String[] objs = new String[] { "编号", "订单" };
+		String[] objs = new String[] { "编号", "名称", "地址", "数量", "总价", "支付状态", "是否接单", "联系电话" };
 		tableModelOrder = new DefaultTableModel(objs, 0);
 		table.setModel(tableModelOrder);
 		scrollPane.setViewportView(table);
-		
+		showOrderModel(); // 显示订单表当中的数据
 		label_userCenter.setText("订单");
 	}
 
 	public void showShoppingModel() {
+//		UserInfo userInfo = iUserInfoService.getSimpleUserInfo(FileUtils.getSomeByFile("user_login.txt"));
+//		System.out.println(userInfo);
 		for (Shopping shopping : iShoppingService.getMoreShoppings()) {
-			tableModelShopping.addRow(new Object[] { shopping.getId(), shopping.getTotalPrice() });
+			Commodity commodity = iCommodityService.getSimpleCommodity(shopping.getCommodityId());
+			if (commodity != null) {
+				tableModelShopping.addRow(new Object[] { shopping.getId(), commodity.getName(), commodity.getPrice(),
+						shopping.getNumber(), shopping.getTotalPrice(), shopping.getCreatedTime() });
+			}
 		}
 	}
+
+	public void showOrderModel() {
+//		UserInfo userInfo = iUserInfoService.getSimpleUserInfo(FileUtils.getSomeByFile("user_login.txt"));
+		for (OrderDetails orderDetails : iOrderDetailsService.getMoreOrders()) {
+			Commodity commodity = iCommodityService.getSimpleCommodity(orderDetails.getCommodityId());
+			Address address = iAddressService.getSimpleAddress(orderDetails.getAddressId());
+			
+			if (commodity != null && address != null) {
+				// 未支付 商家未接单
+				if (orderDetails.getState() == 0) {
+					tableModelOrder.addRow(new Object[] { orderDetails.getId(), commodity.getName(),
+							address.getAddress(), orderDetails.getNumber(), orderDetails.getTotalPrice(), "未支付",
+							"商家未接单", address.getPhone() });
+				} else {
+					// 已支付 商家未接单
+					if (orderDetails.getDeliverState() == 0) {
+						tableModelOrder.addRow(new Object[] { orderDetails.getId(), commodity.getName(),
+								address.getAddress(), orderDetails.getNumber(), orderDetails.getTotalPrice(), "已支付",
+								"商家未接单", address.getPhone() });
+					} else {
+						// 已支付 商家已经接单待送达
+						tableModelOrder.addRow(new Object[] { orderDetails.getId(), commodity.getName(),
+								address.getAddress(), orderDetails.getNumber(), orderDetails.getTotalPrice(), "已支付",
+								"商家已接单,待送达", address.getPhone() });
+					}
+				}
+			}
+		}
+	}
+	
+	
+	
+	
 }

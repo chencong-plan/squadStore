@@ -18,7 +18,7 @@ public class FileUtils {
 			if (!file.exists()) {
 				file.createNewFile();
 			}
-			FileOutputStream outputStream = new FileOutputStream(file, true);
+			FileOutputStream outputStream = new FileOutputStream(file);   //不追加 登录就将其覆盖
 			byte[] bytes = value.getBytes("utf-8");
 			for (byte b : bytes) {
 				outputStream.write(b);

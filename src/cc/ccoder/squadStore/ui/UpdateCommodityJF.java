@@ -1,10 +1,6 @@
 package cc.ccoder.squadStore.ui;
 
-import static org.hamcrest.CoreMatchers.nullValue;
-
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.lang.Thread.State;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -43,6 +39,13 @@ public class UpdateCommodityJF extends JFrame {
 	// 将商品service接口注入进来
 	private ICommodityService iCommodityService = new CommodityServiceImpl();
 
+
+	private CommodityManageJF commodityManageJF;
+
+	public void setCommodityManageJF(CommodityManageJF commodityManageJF) {
+		this.commodityManageJF = commodityManageJF;
+	}
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -55,7 +58,6 @@ public class UpdateCommodityJF extends JFrame {
 			}
 		});
 	}
-	
 
 	/**
 	 * Create the frame.
@@ -129,9 +131,7 @@ public class UpdateCommodityJF extends JFrame {
 									JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 							if (num == 0) {
 								UpdateCommodityJF.this.dispose();
-								CommodityManageJF cJf = new CommodityManageJF();
-								cJf.setVisible(true);
-								cJf.initModel(1, 10);
+								commodityManageJF.initModel(commodityManageJF.getPageNum(), 10);
 							}
 						} else {
 							JOptionPane.showMessageDialog(UpdateCommodityJF.this, "修改失败");
@@ -153,7 +153,7 @@ public class UpdateCommodityJF extends JFrame {
 				UpdateCommodityJF.this.dispose();
 				CommodityManageJF commodityManageJF = new CommodityManageJF();
 				commodityManageJF.setVisible(true);
-				commodityManageJF.initModel(1,10);
+				commodityManageJF.initModel(1, 10);
 			}
 		});
 
