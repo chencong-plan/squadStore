@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedWriter;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -54,6 +55,7 @@ public class CommodityManageJF extends JFrame {
 	private int pageNum = 1;
 	private int pageSize = 10;
 	private int pageSum = (int) Math.ceil(iCommodityService.getMoreCommodityInfos().size()/10.0);
+	private JButton btn_order;
 
 	public int getPageNum() {
 		return pageNum;
@@ -237,6 +239,18 @@ public class CommodityManageJF extends JFrame {
 		label_nowPage.setFont(new Font("楷体", Font.PLAIN, 15));
 		label_nowPage.setBounds(360, 433, 68, 18);
 		contentPane.add(label_nowPage);
+		
+		btn_order = new JButton("订单");
+		btn_order.setFont(new Font("楷体", Font.PLAIN, 17));
+		btn_order.setBounds(21, 365, 74, 29);
+		contentPane.add(btn_order);
+		btn_order.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				OrderManagerJF orderManagerJF = new OrderManagerJF();
+				orderManagerJF.setVisible(true);
+			}
+		});
 
 	
 		

@@ -9,18 +9,38 @@ import cc.ccoder.squadStore.service.IShoppingService;
 
 public class ShoppingServiceImpl implements IShoppingService {
 
-	//注入dao层shopping接口
+	// 注入dao层shopping接口
 	private IShoppingDao iShoppingDao = new ShoppingDaoImpl();
+
 	@Override
 	public boolean addToShopping(Shopping shopping) {
 		if (shopping == null) {
 			return false;
 		}
-		return iShoppingDao.addToShopping(shopping) ;
+		return iShoppingDao.addToShopping(shopping);
 	}
+
 	@Override
 	public List<Shopping> getMoreShoppings() {
 		return iShoppingDao.getMoreShoppings();
 	}
+
+	@Override
+	public boolean deleteShoppingById(Integer id) {
+		if (id == null) {
+			return false;
+		}
+		return iShoppingDao.deleteShoppingById(id);
+	}
+
+	@Override
+	public Shopping getSimpleShopping(Integer id) {
+		if (id == null) {
+			return null;
+		}
+		return iShoppingDao.getSimpleShopping(id);
+	}
+	
+	
 
 }

@@ -126,7 +126,7 @@ public class DBOperatorUtils {
 					String cloName = metaData.getColumnName(i + 1);
 					Object cloValue = resultSet.getObject(cloName);
 					if (cloValue == null) {
-						cloValue = "";
+						cloValue = null;
 					}
 					Field field = clazz.getDeclaredField(cloName);
 					field.setAccessible(true);

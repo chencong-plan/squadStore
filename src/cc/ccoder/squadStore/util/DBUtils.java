@@ -13,15 +13,15 @@ import java.sql.SQLException;
  */
 public class DBUtils {
 
-	private static final String Driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-	private static final String url = "jdbc:sqlserver://localhost:1433;DataBaseName=squadStore";
-	private static final String user = "sa";
-	private static final String password = "123456";
-	
-//	private static final String Driver = "com.mysql.jdbc.Driver";
-//	private static final String url = "jdbc:mysql://localhost:3306/squadStore";
-//	private static final String user = "root";
+//	private static final String Driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+//	private static final String url = "jdbc:sqlserver://localhost:1433;DataBaseName=squadStore";
+//	private static final String user = "sa";
 //	private static final String password = "123456";
+	
+	private static final String Driver = "com.mysql.jdbc.Driver";
+	private static final String url = "jdbc:mysql://localhost:3306/squadStore";
+	private static final String user = "root";
+	private static final String password = "123456";
 	
 	private static Connection connection = null;
 	

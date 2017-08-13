@@ -7,6 +7,10 @@ import cc.ccoder.squadStore.entity.Shopping;
 public interface IShoppingService {
 
 	boolean addToShopping(Shopping shopping);
-	
+
 	List<Shopping> getMoreShoppings();
+
+	boolean deleteShoppingById(Integer id);
+
+	Shopping getSimpleShopping(Integer id);
 }

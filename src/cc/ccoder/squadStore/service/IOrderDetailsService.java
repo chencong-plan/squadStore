@@ -50,4 +50,12 @@ public interface IOrderDetailsService {
 	 * @return 返回操作是否成功
 	 */
 	boolean updateOrderDeliStateById(Integer id,Integer deliverState);
+	
+	/**
+	 * 获得当前用户的某一笔订单的订单详情
+	 * @param userId 用户id
+	 * @param orderId 将要查询的订单的订单id
+	 * @return 返回的是该订单中的所有订单详情列表信息
+	 */
+	List<OrderDetails> getMoreOrderDetails(Integer userId,Integer orderId);
 }

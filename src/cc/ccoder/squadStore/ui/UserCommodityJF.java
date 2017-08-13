@@ -182,7 +182,11 @@ public class UserCommodityJF extends JFrame {
 
 	private void initModel(int pageNum, int pageSize) {
 		tableModel.setRowCount(0);
-		for (Commodity commodity : iCommodityService.getMoreCommodityByOnShelf(pageNum, pageSize)) {
+//		for (Commodity commodity : iCommodityService.getMoreCommodityByOnShelf(pageNum, pageSize)) {
+//			tableModel.addRow(new Object[] { commodity.getId(), commodity.getName(), commodity.getPrice(),
+//					commodity.getDescribe(), commodity.getCreatedTime() });
+//		}
+		for (Commodity commodity : iCommodityService.getMoreCommodityInfos()) {
 			tableModel.addRow(new Object[] { commodity.getId(), commodity.getName(), commodity.getPrice(),
 					commodity.getDescribe(), commodity.getCreatedTime() });
 		}

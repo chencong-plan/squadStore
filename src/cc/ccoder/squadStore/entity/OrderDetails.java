@@ -4,11 +4,11 @@ package cc.ccoder.squadStore.entity;
  * 
  * @author chencong 订单表
  * 
- *         create table [order_details]( id int primary key identity , userId int not
- *         null, commodityId int not null, addressId int not null, price float
- *         not null, number int check(number >= 1) not null, totalPrice float
- *         not null, deliverState nchar(1) not null, state nvarchar(1) not null,
- *         createdTime smalldatetime , updatedTime smalldatetime default
+ *         create table [order_details]( id int primary key identity , userId
+ *         int not null, commodityId int not null, addressId int not null, price
+ *         float not null, number int check(number >= 1) not null, totalPrice
+ *         float not null, deliverState nchar(1) not null, state nvarchar(1) not
+ *         null, createdTime smalldatetime , updatedTime smalldatetime default
  *         getdate() )
  */
 public class OrderDetails {
@@ -22,6 +22,7 @@ public class OrderDetails {
 	private Double totalPrice;
 	private Integer deliverState;
 	private Integer state;
+	private Integer orderId;
 	private String createdTime;
 	private String updatedTime;
 
@@ -97,6 +98,14 @@ public class OrderDetails {
 		this.state = state;
 	}
 
+	public Integer getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Integer orderId) {
+		this.orderId = orderId;
+	}
+
 	public String getCreatedTime() {
 		return createdTime;
 	}
@@ -113,8 +122,9 @@ public class OrderDetails {
 		this.updatedTime = updatedTime;
 	}
 
-	public OrderDetails(Integer id, Integer userId, Integer commodityId, Integer addressId, Double price, Integer number,
-			Double totalPrice, Integer deliverState, Integer state, String createdTime, String updatedTime) {
+	public OrderDetails(Integer id, Integer userId, Integer commodityId, Integer addressId, Double price,
+			Integer number, Double totalPrice, Integer deliverState, Integer state, Integer orderId, String createdTime,
+			String updatedTime) {
 		super();
 		this.id = id;
 		this.userId = userId;
@@ -125,6 +135,7 @@ public class OrderDetails {
 		this.totalPrice = totalPrice;
 		this.deliverState = deliverState;
 		this.state = state;
+		this.orderId = orderId;
 		this.createdTime = createdTime;
 		this.updatedTime = updatedTime;
 	}
@@ -135,9 +146,10 @@ public class OrderDetails {
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", userId=" + userId + ", commodityId=" + commodityId + ", addressId=" + addressId
-				+ ", price=" + price + ", number=" + number + ", totalPrice=" + totalPrice + ", deliverState="
-				+ deliverState + ", state=" + state + ", createdTime=" + createdTime + ", updatedTime=" + updatedTime
-				+ "]";
+		return "OrderDetails [id=" + id + ", userId=" + userId + ", commodityId=" + commodityId + ", addressId="
+				+ addressId + ", price=" + price + ", number=" + number + ", totalPrice=" + totalPrice
+				+ ", deliverState=" + deliverState + ", state=" + state + ", orderId=" + orderId + ", createdTime="
+				+ createdTime + ", updatedTime=" + updatedTime + "]";
 	}
+
 }

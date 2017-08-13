@@ -48,6 +48,7 @@ public class UserRegisterJF extends JFrame {
 
 	// 将用户service接口注入进来
 	private IUserInfoService iUserInfoService = new UserInfoServiceImpl();
+	private JTextField field_nickname;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -78,11 +79,11 @@ public class UserRegisterJF extends JFrame {
 
 		JLabel label_username = new JLabel("用户名");
 		label_username.setFont(new Font("楷体", Font.PLAIN, 17));
-		label_username.setBounds(105, 37, 74, 27);
+		label_username.setBounds(139, 11, 74, 27);
 		contentPane.add(label_username);
 
 		field_username = new JTextField();
-		field_username.setBounds(200, 36, 167, 31);
+		field_username.setBounds(234, 10, 167, 31);
 		contentPane.add(field_username);
 		field_username.setColumns(10);
 
@@ -93,38 +94,48 @@ public class UserRegisterJF extends JFrame {
 
 		label_password = new JLabel("密  码");
 		label_password.setFont(new Font("楷体", Font.PLAIN, 17));
-		label_password.setBounds(105, 87, 74, 27);
+		label_password.setBounds(139, 61, 74, 27);
 		contentPane.add(label_password);
 
 		field_password = new JPasswordField();
 		field_password.setColumns(10);
-		field_password.setBounds(200, 86, 167, 31);
+		field_password.setBounds(234, 60, 167, 31);
 		contentPane.add(field_password);
 
 		label_repass = new JLabel("确认密码");
 		label_repass.setFont(new Font("楷体", Font.PLAIN, 17));
-		label_repass.setBounds(105, 143, 74, 27);
+		label_repass.setBounds(139, 117, 74, 27);
 		contentPane.add(label_repass);
 
 		field_repass = new JPasswordField();
 		field_repass.setColumns(10);
-		field_repass.setBounds(200, 142, 167, 31);
+		field_repass.setBounds(234, 116, 167, 31);
 		contentPane.add(field_repass);
 
 		label_email = new JLabel("邮  箱");
 		label_email.setFont(new Font("楷体", Font.PLAIN, 17));
-		label_email.setBounds(105, 196, 74, 27);
+		label_email.setBounds(139, 170, 74, 27);
 		contentPane.add(label_email);
 
 		field_email = new JTextField();
 		field_email.setColumns(10);
-		field_email.setBounds(200, 192, 167, 31);
+		field_email.setBounds(234, 166, 167, 31);
 		contentPane.add(field_email);
 
 		label_showPassInfo = new JLabel("");
 		label_showPassInfo.setFont(new Font("楷体", Font.PLAIN, 13));
 		label_showPassInfo.setBounds(386, 143, 179, 27);
 		contentPane.add(label_showPassInfo);
+
+		JLabel label_nickName = new JLabel("昵  称");
+		label_nickName.setFont(new Font("楷体", Font.PLAIN, 17));
+		label_nickName.setBounds(139, 222, 74, 27);
+		contentPane.add(label_nickName);
+
+		field_nickname = new JTextField();
+		field_nickname.setColumns(10);
+		field_nickname.setBounds(234, 226, 167, 31);
+		contentPane.add(field_nickname);
 
 		btn_register = new JButton("注  册");
 		btn_register.setFont(new Font("楷体", Font.PLAIN, 17));
@@ -141,7 +152,9 @@ public class UserRegisterJF extends JFrame {
 				String password = new String(field_password.getPassword());
 				String repass = new String(field_repass.getPassword());
 				String email = field_email.getText();
-				if ("".equals(username) || "".equals(password) || "".equals(repass) || "".equals(email)) {
+				String nickname = field_nickname.getText();
+				if ("".equals(username) || "".equals(password) || "".equals(repass) || "".equals(email)
+						|| "".equals(nickname)) {
 					JOptionPane.showConfirmDialog(UserRegisterJF.this, "输入框不能够为空", "提示", JOptionPane.YES_NO_OPTION,
 							JOptionPane.INFORMATION_MESSAGE);
 				} else {
@@ -155,20 +168,23 @@ public class UserRegisterJF extends JFrame {
 							userInfo.setUsername(username);
 							userInfo.setPassword(password);
 							userInfo.setEmail(email);
+							userInfo.setNickname(nickname);
 							userInfo.setCreatedTime(DateUtils.getNowTime());
 							userInfo.setUpdatedTime(DateUtils.getNowTime());
-							//开始注册
+							// 开始注册
 							int result = iUserInfoService.UserInfoRegister(userInfo);
-							if (result==ConstInfo.SUCCESS.getIndex()) {
-								//操作成功
-								int num = JOptionPane.showConfirmDialog(UserRegisterJF.this, "注册成功,前去登录吧","提示",JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE);
+							if (result == ConstInfo.SUCCESS.getIndex()) {
+								// 操作成功
+								int num = JOptionPane.showConfirmDialog(UserRegisterJF.this, "注册成功,前去登录吧", "提示",
+										JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE);
 								if (num == 0) {
 									UserRegisterJF.this.dispose();
 									LoginJF loginJF = new LoginJF();
 									loginJF.setVisible(true);
 								}
-							}else{
-								JOptionPane.showConfirmDialog(UserRegisterJF.this, "注册失败,请稍后重试","错误",JOptionPane.YES_OPTION,JOptionPane.ERROR_MESSAGE);
+							} else {
+								JOptionPane.showConfirmDialog(UserRegisterJF.this, "注册失败,请稍后重试", "错误",
+										JOptionPane.YES_OPTION, JOptionPane.ERROR_MESSAGE);
 							}
 						} else {
 							// 密码不一致 不允许注册
@@ -187,6 +203,7 @@ public class UserRegisterJF extends JFrame {
 		btn_back.setFont(new Font("楷体", Font.PLAIN, 17));
 		btn_back.setBounds(308, 285, 93, 31);
 		contentPane.add(btn_back);
+
 		// 返回按钮的点击事件
 		btn_back.addActionListener(new ActionListener() {
 			@Override
@@ -199,5 +216,4 @@ public class UserRegisterJF extends JFrame {
 		});
 
 	}
-
 }

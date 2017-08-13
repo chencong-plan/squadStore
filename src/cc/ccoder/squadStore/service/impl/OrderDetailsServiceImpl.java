@@ -56,4 +56,14 @@ public class OrderDetailsServiceImpl  implements IOrderDetailsService{
 		return iOrderDetailsDao.updateOrderDeliStateById(id, deliverState);
 	}
 
+	@Override
+	public List<OrderDetails> getMoreOrderDetails(Integer userId, Integer orderId) {
+		if (userId == null || orderId == null) {
+			return null;
+		}
+		return iOrderDetailsDao.getMoreOrderDetails(userId, orderId);
+	}
+	
+	
+
 }
